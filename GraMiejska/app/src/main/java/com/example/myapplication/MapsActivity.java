@@ -6,8 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -34,10 +38,13 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private Polyline previousPolyline;
     private List<Marker> markersList = new ArrayList<Marker>();
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
@@ -65,18 +72,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng budynekPoStarejGazowniLat = new LatLng(53.447200, 14.555068);
     LatLng wiezaQuistorpaLat = new LatLng(53.464535, 14.516117);
     LatLng cmentarzCentralnyKaplicaLat = new LatLng(53.417490, 14.523997);
-
     public void drawRoute(View view) {
+        // Lista wszystkich markerów
+        List<LatLng> allMarkers = Arrays.asList(
+                ZUTLat, walyChrobregoLat, pomnikOrlowSzczecinLat, amfiteatrLat, pomnikKrzysztofaJarzynyLat,
+                bulwarySzczecinskieLat, marinaLat, kinoPionierLat, zamekKsiazatPomorskichWSzczecinieLat,
+                stareMiastoLat, ogrodRozanyLat, filharmoniaLat, placAdamowiczaLat, jezioroGlebokieLat,
+                jezioroSzmaragdoweLat, cafe22Lat, centrumDialoguPrzelomyLat, dawnyDomGrabarzaLat,
+                domRzeznikaZNiebuszewaLat, dzwigozauryLat, bramaKrolewskaLat, budynekPoStarejGazowniLat,
+                wiezaQuistorpaLat, cmentarzCentralnyKaplicaLat);
+
+        // Losowe wybieranie dwóch różnych markerów
+        Random random = new Random();
+        int index1 = random.nextInt(allMarkers.size());
+        int index2 = random.nextInt(allMarkers.size() - 1);
+        if (index2 >= index1) {
+            index2++;
+        }
+        LatLng marker1 = allMarkers.get(index1);
+        LatLng marker2 = allMarkers.get(index2);
+
         GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("")
+                .apiKey("AIzaSyAISPPbDlFwdXFkQIwLfl6JGAYn1qhPRtY")
                 .build();
 
         // Tworzenie obiektu DirectionsResult za pomocą Directions API
         DirectionsResult directionsResult;
         try {
             directionsResult = DirectionsApi.newRequest(context)
-                    .origin(ZUTLat.latitude + "," + ZUTLat.longitude)
-                    .destination(walyChrobregoLat.latitude + "," + walyChrobregoLat.longitude)
+                    .origin(marker1.latitude + "," + marker1.longitude)
+                    .destination(marker2.latitude + "," + marker2.longitude)
                     .await();
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,13 +117,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // Rysowanie linii między punktami na mapie
+        if (previousPolyline != null) {
+            previousPolyline.remove();
+        }
+
+// Rysowanie linii między punktami na mapie
         PolylineOptions lineOptions = new PolylineOptions();
         lineOptions.addAll(points);
         lineOptions.width(10);
         lineOptions.color(Color.BLUE);
 
-        mMap.addPolyline(lineOptions);
+        previousPolyline = mMap.addPolyline(lineOptions);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        // Add "Quit" button to the menu
+        MenuItem quitMenuItem = menu.add(Menu.NONE, R.id.menu_quit, Menu.NONE, "Quit");
+        quitMenuItem.setIcon(R.drawable.ic_quit); // Set the icon for the "Quit" button
+        quitMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER); // Change to SHOW_AS_ACTION_ALWAYS if you want it to always appear in the action bar
+
+        return true;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +151,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        Button quitButton = findViewById(R.id.btn_quit);
+        quitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Close the activity and exit the application
+            }
+        });
+
+        Button optionsButton = findViewById(R.id.btn_options);
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openOptionsDialog(); // Open the options dialog
+            }
+        });
+    }
+
+    private void openOptionsDialog() {
+        // Start the OptionsActivity
+        Intent intent = new Intent(this, OptionsActivity.class);
+        startActivity(intent);
     }
 
 
@@ -263,6 +324,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markersList.add(wiezaQuistorpa);
         markersList.add(cmentarzCentralnyKaplica);
 
+        Random random = new Random();
+        List<LatLng> markerPoints = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            int randomIndex = random.nextInt(markersList.size());
+            LatLng latLng = markersList.get(randomIndex).getPosition();
+            markerPoints.add(latLng);
+            markersList.remove(randomIndex);
+        }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener(){
             @Override
