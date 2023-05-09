@@ -93,7 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng marker2 = allMarkers.get(index2);
 
         GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyAISPPbDlFwdXFkQIwLfl6JGAYn1qhPRtY")
+                .apiKey("")
                 .build();
 
         // Tworzenie obiektu DirectionsResult za pomocą Directions API
