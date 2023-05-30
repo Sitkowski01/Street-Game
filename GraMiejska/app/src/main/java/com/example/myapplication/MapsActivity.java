@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,9 +45,12 @@ import java.util.Random;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private SeekBar volumeSlider;
     private Polyline previousPolyline;
     private List<Marker> markersList = new ArrayList<Marker>();
     private GoogleMap mMap;
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300; // Przykładowy czas (w milisekundach) dla rozpoznania dwukrotnego kliknięcia
+    private long lastClickTime = 0;
     private ActivityMapsBinding binding;
     LatLng ZUTLat = new LatLng(53.424459, 14.535451);
     LatLng walyChrobregoLat = new LatLng(53.429872, 14.565118);
@@ -159,6 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
         Button optionsButton = findViewById(R.id.btn_options);
         optionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 openOptionsDialog(); // Open the options dialog
             }
         });
+
     }
 
     private void openOptionsDialog() {
@@ -193,103 +199,145 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions marker = new MarkerOptions();
 
+        BitmapDescriptor ZUT_icon = BitmapDescriptorFactory.fromResource(R.drawable.zut);
+        BitmapDescriptor Jarzyna_icon = BitmapDescriptorFactory.fromResource(R.drawable.jarzyna);
+        BitmapDescriptor Waly_icon = BitmapDescriptorFactory.fromResource(R.drawable.waly);
+        BitmapDescriptor Blonia_icon = BitmapDescriptorFactory.fromResource(R.drawable.blonia);
+        BitmapDescriptor Bulwary_icon = BitmapDescriptorFactory.fromResource(R.drawable.bulwary);
+        BitmapDescriptor Marina_icon = BitmapDescriptorFactory.fromResource(R.drawable.marina);
+        BitmapDescriptor Pionier_icon = BitmapDescriptorFactory.fromResource(R.drawable.pionier);
+        BitmapDescriptor Zamek_icon = BitmapDescriptorFactory.fromResource(R.drawable.zamek);
+        BitmapDescriptor Stare_miasto_icon = BitmapDescriptorFactory.fromResource(R.drawable.stare_miasto);
+        BitmapDescriptor Ogrod_rozany_icon = BitmapDescriptorFactory.fromResource(R.drawable.rozanka);
+        BitmapDescriptor Filharmonia_icon = BitmapDescriptorFactory.fromResource(R.drawable.filharmonia);
+        BitmapDescriptor Plac_adamowicza_icon = BitmapDescriptorFactory.fromResource(R.drawable.plac_adamowicza);
+        BitmapDescriptor Jezioro_glebokie_icon = BitmapDescriptorFactory.fromResource(R.drawable.glebokie);
+        BitmapDescriptor Jezioro_szmaragdowe_icon = BitmapDescriptorFactory.fromResource(R.drawable.szmaragdowe);
+        BitmapDescriptor Cafe22_icon = BitmapDescriptorFactory.fromResource(R.drawable.cafe22);
+        BitmapDescriptor Centrum_dialogu_icon = BitmapDescriptorFactory.fromResource(R.drawable.centrum_dialogu);
+        BitmapDescriptor Dom_grabarza_icon = BitmapDescriptorFactory.fromResource(R.drawable.grabaz);
+        BitmapDescriptor Dom_rzeznika_icon = BitmapDescriptorFactory.fromResource(R.drawable.rzeznik);
+        BitmapDescriptor Dzwigozaury_icon = BitmapDescriptorFactory.fromResource(R.drawable.dzwigozaury);
+        BitmapDescriptor Brama_krolewska_icon = BitmapDescriptorFactory.fromResource(R.drawable.brama_portowa);
+        BitmapDescriptor Budynek_gazowni_icon = BitmapDescriptorFactory.fromResource(R.drawable.gazownia);
+        BitmapDescriptor Wieza_icon = BitmapDescriptorFactory.fromResource(R.drawable.wieza);
+        BitmapDescriptor Cmentarz_icon = BitmapDescriptorFactory.fromResource(R.drawable.cmentarz);
         // TWORZENIE MARKERÓW
 
         Marker ZUT = mMap.addMarker(marker
                 .position(ZUTLat)
-                .title("Zut"));
+                .title("Zut")
+                .icon(ZUT_icon));
 
         Marker walyChrobrego = mMap.addMarker(marker
                 .position(walyChrobregoLat)
-                .title("Wały Chrobrego"));
+                .title("Wały Chrobrego")
+                .icon(Waly_icon));
 
         Marker pomnikOrlowSzczecin = mMap.addMarker(marker
                 .position(pomnikOrlowSzczecinLat)
-                .title("Pomnik Orłów"));
-
-        Marker amfiteatr = mMap.addMarker(marker
-                .position(amfiteatrLat)
-                .title("Amfiteatr"));
+                .title("Pomnik Orłów")
+                .icon(Blonia_icon));
 
         Marker pomnikKrzysztofaJarzyny = mMap.addMarker(marker
                 .position(pomnikKrzysztofaJarzynyLat)
-                .title("Pomnik Krzysztofa Jarzyny"));
+                .title("Pomnik Krzysztofa Jarzyny")
+                .icon(Jarzyna_icon));
 
         Marker bulwarySzczecinskie = mMap.addMarker(marker
                 .position(bulwarySzczecinskieLat)
-                .title("Bulwary Szczecinskie"));
+                .title("Bulwary Szczecinskie")
+                .icon(Bulwary_icon));
 
         Marker marina = mMap.addMarker(marker
                 .position(marinaLat)
-                .title("Marina"));
+                .title("Marina")
+                .icon(Marina_icon));
 
         Marker kinoPionier = mMap.addMarker(marker
                 .position(kinoPionierLat)
-                .title("Kino Pionier"));
+                .title("Kino Pionier")
+                .icon(Pionier_icon));
 
         Marker zamekKsiazatPomorskichWSzczecinie = mMap.addMarker(marker
                 .position(zamekKsiazatPomorskichWSzczecinieLat)
-                .title("Zamek Książąt Pomorskich w Szczecinie"));
+                .title("Zamek Książąt Pomorskich w Szczecinie")
+                .icon(Zamek_icon));
 
         Marker stareMiasto = mMap.addMarker(marker
                 .position(stareMiastoLat)
-                .title("Stare Miasto"));
+                .title("Stare Miasto")
+                .icon(Stare_miasto_icon));
 
         Marker ogrodRozany = mMap.addMarker(marker
                 .position(ogrodRozanyLat)
-                .title("Ogród Różany"));
+                .title("Ogród Różany")
+                .icon(Ogrod_rozany_icon));
 
         Marker filharmonia = mMap.addMarker(marker
                 .position(filharmoniaLat)
-                .title("Filharmonia"));
+                .title("Filharmonia")
+                .icon(Filharmonia_icon));
 
         Marker placAdamowicza = mMap.addMarker(marker
                 .position(placAdamowiczaLat)
-                .title("Plac Adamowicza"));
+                .title("Plac Adamowicza")
+                .icon(Plac_adamowicza_icon));
 
         Marker jezioroGlebokie = mMap.addMarker(marker
                 .position(jezioroGlebokieLat)
-                .title("Jezioro Głebokie"));
+                .title("Jezioro Głebokie")
+                .icon(Jezioro_glebokie_icon));
 
         Marker jezioroSzmaragdowe = mMap.addMarker(marker
                 .position(jezioroSzmaragdoweLat)
-                .title("Jezioro Szmargdowe"));
+                .title("Jezioro Szmargdowe")
+                .icon(Jezioro_szmaragdowe_icon));
 
         Marker cafe22 = mMap.addMarker(marker
                 .position(cafe22Lat)
-                .title("Cafe22"));
+                .title("Cafe22")
+                .icon(Cafe22_icon));
 
         Marker centrumDialoguPrzelomy = mMap.addMarker(marker
                 .position(centrumDialoguPrzelomyLat)
-                .title("Centrum Dialogu Przełomy"));
+                .title("Centrum Dialogu Przełomy")
+                .icon(Centrum_dialogu_icon));
 
         Marker dawnyDomGrabarza = mMap.addMarker(marker
                 .position(dawnyDomGrabarzaLat)
-                .title("Dawny Dom Grabarza"));
+                .title("Dawny Dom Grabarza")
+                .icon(Dom_grabarza_icon));
 
         Marker domRzeznikaZNiebuszewa = mMap.addMarker(marker
                 .position(domRzeznikaZNiebuszewaLat)
-                .title("Dom Rzeźnika z Niebuszewa"));
+                .title("Dom Rzeźnika z Niebuszewa")
+                .icon(Dom_rzeznika_icon));
 
         Marker dzwigozaury = mMap.addMarker(marker
                 .position(dzwigozauryLat)
-                .title("Dźwigozaury"));
+                .title("Dźwigozaury")
+                .icon(Dzwigozaury_icon));
 
         Marker bramaKrolewska = mMap.addMarker(marker
                 .position(bramaKrolewskaLat)
-                .title("Brama Królewska(Wedel)"));
+                .title("Brama Królewska(Wedel)")
+                .icon(Brama_krolewska_icon));
 
         Marker budynekPoStarejGazowni = mMap.addMarker(marker
                 .position(budynekPoStarejGazowniLat)
-                .title("Budynek po Starej Gazowni"));
+                .title("Budynek po Starej Gazowni")
+                .icon(Budynek_gazowni_icon));
 
         Marker wiezaQuistorpa = mMap.addMarker(marker
                 .position(wiezaQuistorpaLat)
-                .title("Wieża Quistorpa"));
+                .title("Wieża Quistorpa")
+                .icon(Wieza_icon));
 
         Marker cmentarzCentralnyKaplica = mMap.addMarker(marker
                 .position(cmentarzCentralnyKaplicaLat)
-                .title("Cmentarz Centralny Kaplica"));
+                .title("Cmentarz Centralny Kaplica")
+                .icon(Cmentarz_icon));
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(ZUTLat,15);
         googleMap.animateCamera(cameraUpdate);
@@ -302,7 +350,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markersList.add(ZUT);
         markersList.add(walyChrobrego);
         markersList.add(pomnikOrlowSzczecin);
-        markersList.add(amfiteatr);
         markersList.add(pomnikKrzysztofaJarzyny);
         markersList.add(bulwarySzczecinskie);
         markersList.add(marina);
@@ -343,6 +390,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(i);
 
                 return false;
+
             }
         });
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {

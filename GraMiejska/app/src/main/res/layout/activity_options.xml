@@ -1,53 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="@drawable/gradient_background"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Street Game"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="60sp"
+        android:textColor="#F3C301"
+        android:shadowColor="#000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="15"/>
     <TextView
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Street Game"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:gravity="center"
-        />
+        android:layout_marginTop="20dp"
+        android:text="Menu"
+        android:textColor="#042940"
+        android:textSize="50sp"
+        android:layout_gravity="center_horizontal"
+
+        android:gravity="center" />
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_weight="1"></LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom|center_horizontal"
-        android:orientation="horizontal">
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <Button
             android:id="@+id/draw_route_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Draw Route"
+            android:textSize="20dp"
             android:onClick="drawRoute"
-            android:layout_marginStart="8dp" />
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp"/>
+
 
         <Button
-            android:id="@+id/btn_options"
+            android:id="@+id/btn_options2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Options"
-            android:layout_marginStart="8dp" />
+            android:textSize="20dp"
+            android:onClick="openOptions"
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="20dp" />
+
 
         <Button
             android:id="@+id/btn_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quit" />
-
+            android:text="Quit"
+            android:textSize="20dp"
+            android:background="@drawable/button_background"
+            android:textColor="#FFFFFF"
+            />
 
     </LinearLayout>
+
 </LinearLayout>

@@ -1,62 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <TextView
-        android:id="@+id/text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Street Game"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:gravity="center"
-        />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:padding="16dp">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MapsActivity"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom|center_horizontal"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/draw_route_button"
+        <TextView
+            android:id="@+id/text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Draw Route"
-            android:onClick="drawRoute"
-            android:layout_marginStart="8dp" />
+            android:text="Street Game"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        tools:context=".MapsActivity" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp"
+        android:padding="16dp">
 
         <Button
             android:id="@+id/btn_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Options"
-            android:layout_marginStart="8dp" />
+            android:text="Menu"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background" />
+
+        <Button
+            android:id="@+id/draw_route_button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Draw Route"
+            android:onClick="drawRoute"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/btn_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quit" />
-
+            android:text="Quit"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:padding="2dp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background" />
 
     </LinearLayout>
-</LinearLayout>
+
+</FrameLayout>
